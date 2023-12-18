@@ -14,14 +14,24 @@ namespace LoR
     class CampiDelPellennor
     {
 
-        List<Umano> listaUmani = new List<Umano>();
-        List<Elfo> listaElfi = new List<Elfo>();
-        List<Nano> listaNani = new List<Nano>();
-        List<Hobbit> listaHobbit = new List<Hobbit>();
+        List<Combattente> listaUmani = new List<Combattente>();
+        List<Combattente> listaElfi = new List<Combattente>();
+        List<Combattente> listaNani = new List<Combattente>();
+        List<Combattente> listaHobbit = new List<Combattente>();
 
-        List<Orco> listaOrchi = new List<Orco>();
-        List<Uruk_Hai> listaUrukHai = new List<Uruk_Hai>();
-        List<Sudrone> listaSudroni = new List<Sudrone>();
+        List<Combattente> listaOrchi = new List<Combattente>();
+        List<Combattente> listaUrukHai = new List<Combattente>();
+        List<Combattente> listaSudroni = new List<Combattente>();
+
+        Battaglione battaglioneUmani = new Battaglione();
+        Battaglione battaglioneElfi = new Battaglione();
+        Battaglione battaglioneNani = new Battaglione();
+
+        Battaglione battaglioneHobbit = new Battaglione();
+
+        Battaglione battaglioneOrchi = new Battaglione();
+        Battaglione battaglioneUrukHai = new Battaglione();
+        Battaglione battaglioneSudroni = new Battaglione();
         public void MenuCreazione()
         {
             int rispostaSchieramento;
@@ -45,15 +55,19 @@ namespace LoR
                 {
                     case 1:
                         Comandante = new Umano();
+                        listaUmani.Add(Comandante);
                         break;
                     case 2:
                         Comandante = new Elfo();
+                        listaElfi.Add(Comandante);
                         break;
                     case 3:
                         Comandante = new Nano();
+                        listaNani.Add(Comandante);
                         break;
                     case 4:
                         Comandante = new Hobbit();
+                        listaHobbit.Add(Comandante);
                         break;
                 }
             }
@@ -69,12 +83,15 @@ namespace LoR
                 {
                     case 1:
                         Comandante = new Orco();
+                        listaOrchi.Add(Comandante);
                         break;
                     case 2:
                         Comandante = new Uruk_Hai();
+                        listaUrukHai.Add(Comandante);
                         break;
                     case 3:
                         Comandante = new Sudrone();
+                        listaSudroni.Add(Comandante);
                         break;
                 }
             }
@@ -178,6 +195,181 @@ namespace LoR
                 }
             }
 
+           
+
+            battaglioneUmani.CalcolaVita(listaUmani);
+            battaglioneUmani.CalcolaForza(listaUmani);
+            battaglioneUmani.CalcolaEsperienza(listaUmani);
+            battaglioneUmani.CalcolaDanno(listaUmani);
+            battaglioneUmani.Razza = "umani";
+
+            battaglioneElfi.CalcolaVita(listaElfi);
+            battaglioneElfi.CalcolaForza(listaElfi);
+            battaglioneElfi.CalcolaEsperienza(listaElfi);
+            battaglioneElfi.CalcolaDanno(listaElfi);
+            battaglioneElfi.Razza = "elfi";
+            
+            battaglioneNani.CalcolaVita(listaNani);
+            battaglioneNani.CalcolaForza(listaNani);
+            battaglioneNani.CalcolaEsperienza(listaNani);
+            battaglioneNani.CalcolaDanno(listaNani);
+            battaglioneNani.Razza = "nani";
+            
+            battaglioneHobbit.CalcolaVita(listaHobbit);
+            battaglioneHobbit.CalcolaForza(listaHobbit);
+            battaglioneHobbit.CalcolaEsperienza(listaHobbit);
+            battaglioneHobbit.CalcolaDanno(listaHobbit);
+            battaglioneHobbit.Razza = "hobbit";
+
+            battaglioneOrchi.CalcolaVita(listaOrchi);
+            battaglioneOrchi.CalcolaForza(listaOrchi);
+            battaglioneOrchi.CalcolaEsperienza(listaOrchi);
+            battaglioneOrchi.CalcolaDanno(listaOrchi);
+            battaglioneOrchi.Razza = "orchi";
+
+            battaglioneUrukHai.CalcolaVita(listaUrukHai);
+            battaglioneUrukHai.CalcolaForza(listaUrukHai);
+            battaglioneUrukHai.CalcolaEsperienza(listaUrukHai);
+            battaglioneUrukHai.CalcolaDanno(listaUrukHai);
+            battaglioneUrukHai.Razza = "urukHai";
+
+            battaglioneSudroni.CalcolaVita(listaSudroni);
+            battaglioneSudroni.CalcolaForza(listaSudroni);
+            battaglioneSudroni.CalcolaEsperienza(listaSudroni);
+            battaglioneSudroni.CalcolaDanno(listaSudroni);
+            battaglioneSudroni.Razza = "sudroni";
+
+            Console.WriteLine("È tempo di far trionfare le truppe del Bene! Portale alla vittoria Comandante!");
+
+            MenuGuerra(schieramentoComandante);
+        }
+
+        public void MenuGuerra(int schieramentoComandante)
+        {
+            Random random = new Random();
+            Battaglione bene = new Battaglione();
+            Battaglione male = new Battaglione();
+            List<Combattente> listaBene = new List<Combattente>();
+            List<Combattente> listaMale = new List<Combattente>();
+
+            int attaccoComandante;
+            int attaccoNemico;
+            if(schieramentoComandante== 1) 
+            {
+
+                do
+                {
+                    Console.WriteLine("Decidi con quale Battaglione attaccare: (1) per gli Umani, (2) per gli Elfi, (3) per i Nani, (4) per gli Hobbit.");
+                    attaccoComandante = Convert.ToInt32(Console.ReadLine());
+                } while (attaccoComandante < 1 || attaccoComandante > 4);
+
+                switch (attaccoComandante)
+                {
+                    case 1:
+                        bene = battaglioneUmani;
+                        listaBene = listaUmani;
+                        break;
+                    case 2:
+                        bene = battaglioneElfi;
+                        listaBene = listaElfi;
+                        break;
+                    case 3:
+                        bene = battaglioneNani;
+                        listaBene = listaNani;
+                        break;
+                    case 4:
+                        bene = battaglioneHobbit;
+                        listaBene = listaHobbit;
+                        break;
+                }
+
+                attaccoNemico = random.Next(1, 4);
+
+                switch(attaccoNemico)
+                {
+                    case 1:
+                        male = battaglioneOrchi;
+                        listaMale= listaOrchi;
+                        break;
+                    case 2:
+                        male = battaglioneUrukHai;
+                        listaMale= listaUrukHai;
+                        break;
+                    case 3:
+                        male = battaglioneSudroni;
+                        listaMale= listaSudroni;
+                        break;
+                }
+
+                bool bene_male = true;
+                Console.WriteLine("STATISTICHE PRE-BATTAGLIA");
+                bene.Stampa();
+                male.Stampa();
+                Scontro(bene, male, listaBene, listaMale, schieramentoComandante,bene_male);
+            }
+        }
+
+        public void Scontro(Battaglione attaccanti, Battaglione difensori,List<Combattente>listaAttaccanti,List<Combattente> listaDifensori, int SC, bool bene_male)
+        {
+            int dannoInflitto;
+            double moltiplicatoreAttacco = 0;
+            int mediaPre = difensori.MediaVita;
+            //calcolo moltiplicatore
+            if (attaccanti.ForzaTotale > difensori.ForzaTotale)
+            {
+                moltiplicatoreAttacco += 50;
+            }
+
+            if (attaccanti.EsperienzaTotale > difensori.EsperienzaTotale)
+            {
+                moltiplicatoreAttacco += 25;
+            }
+
+            if((attaccanti.Razza=="elfi" && difensori.Razza=="urukHai") || (attaccanti.Razza == "nani" && difensori.Razza == "sudroni") || (attaccanti.Razza == "umani" && difensori.Razza == "orchi"))
+            {
+                moltiplicatoreAttacco += 50;
+                Console.WriteLine("Vantaggio Razza Bene");
+            }else if((attaccanti.Razza == "orchi" && difensori.Razza == "nani") || (attaccanti.Razza == "urukHai" && difensori.Razza == "umani") || (attaccanti.Razza == "sudroni" && difensori.Razza == "elfi"))
+            {
+                moltiplicatoreAttacco += 50;
+                Console.WriteLine("Vantaggio Razza Male");
+            }
+
+            //calcolo danni
+            Console.WriteLine("Moltiplicatore Attacco:"+ moltiplicatoreAttacco);
+            dannoInflitto = Convert.ToInt32(attaccanti.DannoTotale * (moltiplicatoreAttacco / 100));
+            dannoInflitto=attaccanti.DannoTotale + Convert.ToInt32(dannoInflitto);
+            Console.WriteLine("Danni inflitti:" + dannoInflitto);
+
+            //sottraggo i danni alla vita
+            difensori.VitaTotale -= dannoInflitto;
+
+            ////ricalcolo statistiche dei difensori
+            //Console.WriteLine(listaDifensori.Count);
+            //while (difensori.VitaTotale / listaDifensori.Count < mediaPre)
+            //{
+            //    Console.WriteLine("Ricalcolo Statistiche...");
+            //    listaDifensori.RemoveAt(listaDifensori.Count - 1);
+            //    difensori.CalcolaMedia(listaDifensori);
+            //    difensori.CalcolaForza(listaDifensori);
+            //    difensori.CalcolaEsperienza(listaDifensori);
+            //    difensori.CalcolaDanno(listaDifensori);
+            //}
+            //Console.WriteLine(listaDifensori.Count);
+
+            
+
+            //controllo se devono e possono attaccare i difensori
+            if (bene_male && difensori.VitaTotale>0)
+            {
+                bene_male= false;
+                Scontro(difensori,attaccanti,listaDifensori,listaAttaccanti, SC, bene_male);
+            }
+            //stampo i risultati e ritorno al menu
+            Console.WriteLine("STATISTICHE POST-BATTAGLIA");
+            difensori.Stampa();
+            attaccanti.Stampa();
+            MenuGuerra(SC);
         }
     }
 
@@ -375,6 +567,60 @@ namespace LoR
         }
     }
 
+    class Battaglione : IBattaglione 
+    {
+        public int VitaTotale { get; set; }
+        public int MediaVita { get; set; }
+        public int ForzaTotale { get; set; }
+        public int EsperienzaTotale { get; set; }
+        public int DannoTotale { get; set; }
+        public string Razza { get; set; }
+
+
+        public void CalcolaVita(List<Combattente> listaSoldati)
+        {
+            VitaTotale = 0;
+            foreach(var s in listaSoldati)
+            {
+                VitaTotale += s.Vita;
+            }
+        }
+
+        public void CalcolaMedia(List<Combattente> listaSoldati)
+        {
+            MediaVita = VitaTotale / listaSoldati.Count;
+        }
+        public void CalcolaForza(List<Combattente> listaSoldati)
+        {
+            ForzaTotale= 0;
+            foreach (var s in listaSoldati)
+            {
+                ForzaTotale += s.Forza;
+            }
+        }
+        public void CalcolaEsperienza(List<Combattente> listaSoldati)
+        {
+            EsperienzaTotale = 0;
+            foreach (var s in listaSoldati)
+            {
+                EsperienzaTotale += s.Esperienza;
+            }
+        }
+        public void CalcolaDanno(List<Combattente> listaSoldati)
+        {
+            DannoTotale = 0;
+            foreach (var s in listaSoldati)
+            {
+                DannoTotale += (s.Danno/2);
+            }
+        }
+        public void Stampa()
+        {
+            Console.WriteLine("Statistiche battaglione {0}:",Razza);
+            Console.WriteLine($"Vita: {VitaTotale}, Forza: {ForzaTotale}, Esperienza: {EsperienzaTotale}, Danno: {DannoTotale}, Razza: {Razza}");
+        }
+    }
+
     interface ICombattente
     {
         int Vita { get; set; }
@@ -392,14 +638,17 @@ namespace LoR
     interface IBattaglione
     {
         int VitaTotale { get; set; }
+        int MediaVita { get; set; }
         int ForzaTotale { get; set; }
         int EsperienzaTotale { get; set; }
         int DannoTotale { get; set; }
+        string Razza { get;set; }
 
-        void CalcolaVita();
-        void CalcolaForza();
-        void CalcolaEsperienza();
-        void CalcolaDanno();
+        void CalcolaVita(List<Combattente> listaSoldati);
+        void CalcolaForza(List<Combattente> listaSoldati);
+        void CalcolaEsperienza(List<Combattente> listaSoldati);
+        void CalcolaDanno(List<Combattente> listaSoldati);
+        void CalcolaMedia(List<Combattente> listaSoldati);
         void Stampa();
     }
 }
