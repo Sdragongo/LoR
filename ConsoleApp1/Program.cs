@@ -111,10 +111,10 @@ namespace LoR
                 Comandante.Stampa();
             }
 
-            GeneraEserciti(Comandante, rispostaSchieramento);
+            GeneraEserciti(Comandante, rispostaSchieramento,rispostaRazza);
         }
 
-        public void GeneraEserciti(object Comandante, int schieramentoComandante)
+        public void GeneraEserciti(object Comandante, int schieramentoComandante,int razzaComandante)
         {
             Random random= new Random();
 
@@ -201,111 +201,162 @@ namespace LoR
             battaglioneUmani.CalcolaForza(listaUmani);
             battaglioneUmani.CalcolaEsperienza(listaUmani);
             battaglioneUmani.CalcolaDanno(listaUmani);
+            battaglioneUmani.CalcolaMedia(listaUmani);
             battaglioneUmani.Razza = "umani";
 
             battaglioneElfi.CalcolaVita(listaElfi);
             battaglioneElfi.CalcolaForza(listaElfi);
             battaglioneElfi.CalcolaEsperienza(listaElfi);
             battaglioneElfi.CalcolaDanno(listaElfi);
+            battaglioneElfi.CalcolaMedia(listaElfi);
             battaglioneElfi.Razza = "elfi";
             
             battaglioneNani.CalcolaVita(listaNani);
             battaglioneNani.CalcolaForza(listaNani);
             battaglioneNani.CalcolaEsperienza(listaNani);
             battaglioneNani.CalcolaDanno(listaNani);
+            battaglioneNani.CalcolaMedia(listaNani);
             battaglioneNani.Razza = "nani";
             
             battaglioneHobbit.CalcolaVita(listaHobbit);
             battaglioneHobbit.CalcolaForza(listaHobbit);
             battaglioneHobbit.CalcolaEsperienza(listaHobbit);
             battaglioneHobbit.CalcolaDanno(listaHobbit);
+            battaglioneHobbit.CalcolaMedia(listaHobbit);
             battaglioneHobbit.Razza = "hobbit";
 
             battaglioneOrchi.CalcolaVita(listaOrchi);
             battaglioneOrchi.CalcolaForza(listaOrchi);
             battaglioneOrchi.CalcolaEsperienza(listaOrchi);
             battaglioneOrchi.CalcolaDanno(listaOrchi);
+            battaglioneOrchi.CalcolaMedia(listaOrchi);
             battaglioneOrchi.Razza = "orchi";
 
             battaglioneUrukHai.CalcolaVita(listaUrukHai);
             battaglioneUrukHai.CalcolaForza(listaUrukHai);
             battaglioneUrukHai.CalcolaEsperienza(listaUrukHai);
             battaglioneUrukHai.CalcolaDanno(listaUrukHai);
+            battaglioneUrukHai.CalcolaMedia(listaUrukHai);
             battaglioneUrukHai.Razza = "urukHai";
 
             battaglioneSudroni.CalcolaVita(listaSudroni);
             battaglioneSudroni.CalcolaForza(listaSudroni);
             battaglioneSudroni.CalcolaEsperienza(listaSudroni);
             battaglioneSudroni.CalcolaDanno(listaSudroni);
+            battaglioneSudroni.CalcolaMedia(listaSudroni);
             battaglioneSudroni.Razza = "sudroni";
 
             Console.WriteLine("È tempo di far trionfare le truppe del Bene! Portale alla vittoria Comandante!");
 
-            MenuGuerra(schieramentoComandante);
+            MenuGuerra(schieramentoComandante,razzaComandante);
         }
 
-        public void MenuGuerra(int schieramentoComandante)
+        public void MenuGuerra(int schieramentoComandante,int razzaComandante)
         {
+            Battaglione battaglioneComandante;
             Random random = new Random();
             Battaglione bene = new Battaglione();
             Battaglione male = new Battaglione();
             List<Combattente> listaBene = new List<Combattente>();
             List<Combattente> listaMale = new List<Combattente>();
-
-            int attaccoComandante;
-            int attaccoNemico;
-            if(schieramentoComandante== 1) 
-            {
-
-                do
-                {
-                    Console.WriteLine("Decidi con quale Battaglione attaccare: (1) per gli Umani, (2) per gli Elfi, (3) per i Nani, (4) per gli Hobbit.");
-                    attaccoComandante = Convert.ToInt32(Console.ReadLine());
-                } while (attaccoComandante < 1 || attaccoComandante > 4);
-
-                switch (attaccoComandante)
+            if (schieramentoComandante == 1) {
+                switch (razzaComandante)
                 {
                     case 1:
-                        bene = battaglioneUmani;
-                        listaBene = listaUmani;
+                        battaglioneComandante = battaglioneUmani;
                         break;
                     case 2:
-                        bene = battaglioneElfi;
-                        listaBene = listaElfi;
+                        battaglioneComandante = battaglioneElfi;
                         break;
                     case 3:
-                        bene = battaglioneNani;
-                        listaBene = listaNani;
+                        battaglioneComandante = battaglioneNani;
                         break;
                     case 4:
-                        bene = battaglioneHobbit;
-                        listaBene = listaHobbit;
+                        battaglioneComandante = battaglioneHobbit;
                         break;
                 }
-
-                attaccoNemico = random.Next(1, 4);
-
-                switch(attaccoNemico)
+            }
+            else
+            {
+                switch (razzaComandante)
                 {
                     case 1:
-                        male = battaglioneOrchi;
-                        listaMale= listaOrchi;
+                        battaglioneComandante = battaglioneOrchi;
                         break;
                     case 2:
-                        male = battaglioneUrukHai;
-                        listaMale= listaUrukHai;
+                        battaglioneComandante = battaglioneUrukHai;
                         break;
                     case 3:
-                        male = battaglioneSudroni;
-                        listaMale= listaSudroni;
+                        battaglioneComandante = battaglioneSudroni;
                         break;
                 }
+            }
+            
 
-                bool bene_male = true;
-                Console.WriteLine("STATISTICHE PRE-BATTAGLIA");
-                bene.Stampa();
-                male.Stampa();
-                Scontro(bene, male, listaBene, listaMale, schieramentoComandante,bene_male);
+            if(battaglioneSudroni.VitaTotale<=0 || battaglioneOrchi.VitaTotale <= 0 || battaglioneUrukHai.VitaTotale <= 0)
+            {
+                Console.WriteLine("Hai vinto!");
+            }else if (battaglioneComandante.VitaTotale<=0)
+            {
+                Console.WriteLine("il tuo battaglione è stato sconfitto e sei perito in battaglia, hai perso.");
+            }
+            else
+            {
+                int attaccoComandante;
+                int attaccoNemico;
+                if (schieramentoComandante == 1)
+                {
+
+                    do
+                    {
+                        Console.WriteLine("Decidi con quale Battaglione attaccare: (1) per gli Umani, (2) per gli Elfi, (3) per i Nani, (4) per gli Hobbit.");
+                        attaccoComandante = Convert.ToInt32(Console.ReadLine());
+                    } while (attaccoComandante < 1 || attaccoComandante > 4);
+
+                    switch (attaccoComandante)
+                    {
+                        case 1:
+                            bene = battaglioneUmani;
+                            listaBene = listaUmani;
+                            break;
+                        case 2:
+                            bene = battaglioneElfi;
+                            listaBene = listaElfi;
+                            break;
+                        case 3:
+                            bene = battaglioneNani;
+                            listaBene = listaNani;
+                            break;
+                        case 4:
+                            bene = battaglioneHobbit;
+                            listaBene = listaHobbit;
+                            break;
+                    }
+
+                    attaccoNemico = random.Next(1, 4);
+
+                    switch (attaccoNemico)
+                    {
+                        case 1:
+                            male = battaglioneOrchi;
+                            listaMale = listaOrchi;
+                            break;
+                        case 2:
+                            male = battaglioneUrukHai;
+                            listaMale = listaUrukHai;
+                            break;
+                        case 3:
+                            male = battaglioneSudroni;
+                            listaMale = listaSudroni;
+                            break;
+                    }
+
+                    bool bene_male = true;
+                    Console.WriteLine("STATISTICHE PRE-BATTAGLIA");
+                    bene.Stampa();
+                    male.Stampa();
+                    Scontro(bene, male, listaBene, listaMale, schieramentoComandante, bene_male);
+                }
             }
         }
 
@@ -344,20 +395,23 @@ namespace LoR
             //sottraggo i danni alla vita
             difensori.VitaTotale -= dannoInflitto;
 
-            ////ricalcolo statistiche dei difensori
-            //Console.WriteLine(listaDifensori.Count);
-            //while (difensori.VitaTotale / listaDifensori.Count < mediaPre)
-            //{
-            //    Console.WriteLine("Ricalcolo Statistiche...");
-            //    listaDifensori.RemoveAt(listaDifensori.Count - 1);
-            //    difensori.CalcolaMedia(listaDifensori);
-            //    difensori.CalcolaForza(listaDifensori);
-            //    difensori.CalcolaEsperienza(listaDifensori);
-            //    difensori.CalcolaDanno(listaDifensori);
-            //}
-            //Console.WriteLine(listaDifensori.Count);
+            //ricalcolo statistiche dei difensori
+            Console.WriteLine(listaDifensori.Count);
+            Console.WriteLine(mediaPre);
+            int soldatiSconfitti=dannoInflitto / mediaPre;
+            for (int i = 0; i < soldatiSconfitti; i++)
+            {
+                Console.WriteLine("Ricalcolo Statistiche...");
+                listaDifensori.RemoveAt(listaDifensori.Count - 1);
+                
+            }
+            difensori.CalcolaMedia(listaDifensori);
+            difensori.CalcolaForza(listaDifensori);
+            difensori.CalcolaEsperienza(listaDifensori);
+            difensori.CalcolaDanno(listaDifensori);
+            Console.WriteLine(listaDifensori.Count);
 
-            
+
 
             //controllo se devono e possono attaccare i difensori
             if (bene_male && difensori.VitaTotale>0)
