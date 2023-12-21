@@ -253,7 +253,7 @@ namespace LoR
 
         public void MenuGuerra(int schieramentoComandante,int razzaComandante)
         {
-            Battaglione battaglioneComandante;
+            Battaglione battaglioneComandante = new Battaglione();
             Random random = new Random();
             Battaglione bene = new Battaglione();
             Battaglione male = new Battaglione();
@@ -355,12 +355,12 @@ namespace LoR
                     Console.WriteLine("STATISTICHE PRE-BATTAGLIA");
                     bene.Stampa();
                     male.Stampa();
-                    Scontro(bene, male, listaBene, listaMale, schieramentoComandante, bene_male);
+                    Scontro(bene, male, listaBene, listaMale, schieramentoComandante,razzaComandante, bene_male);
                 }
             }
         }
 
-        public void Scontro(Battaglione attaccanti, Battaglione difensori,List<Combattente>listaAttaccanti,List<Combattente> listaDifensori, int SC, bool bene_male)
+        public void Scontro(Battaglione attaccanti, Battaglione difensori,List<Combattente>listaAttaccanti,List<Combattente> listaDifensori, int SC,int RC, bool bene_male)
         {
             int dannoInflitto;
             double moltiplicatoreAttacco = 0;
@@ -395,35 +395,42 @@ namespace LoR
             //sottraggo i danni alla vita
             difensori.VitaTotale -= dannoInflitto;
 
-            //ricalcolo statistiche dei difensori
-            Console.WriteLine(listaDifensori.Count);
-            Console.WriteLine(mediaPre);
-            int soldatiSconfitti=dannoInflitto / mediaPre;
-            for (int i = 0; i < soldatiSconfitti; i++)
+            if(difensori.VitaTotale > 0)
             {
-                Console.WriteLine("Ricalcolo Statistiche...");
-                listaDifensori.RemoveAt(listaDifensori.Count - 1);
-                
+                //ricalcolo statistiche dei difensori
+                Console.WriteLine(mediaPre);
+                int soldatiSconfitti = dannoInflitto / mediaPre;
+                for (int i = 0; i < soldatiSconfitti; i++)
+                {
+                    listaDifensori.RemoveAt(listaDifensori.Count - 1);
+                }
+                difensori.CalcolaMedia(listaDifensori);
+                difensori.CalcolaForza(listaDifensori);
+                difensori.CalcolaEsperienza(listaDifensori);
+                difensori.CalcolaDanno(listaDifensori);
+
+
+
+                //controllo se devono e possono attaccare i difensori
+                if (bene_male && difensori.VitaTotale > 0)
+                {
+                    bene_male = false;
+                    Scontro(difensori, attaccanti, listaDifensori, listaAttaccanti, SC, RC, bene_male);
+                }
             }
-            difensori.CalcolaMedia(listaDifensori);
-            difensori.CalcolaForza(listaDifensori);
-            difensori.CalcolaEsperienza(listaDifensori);
-            difensori.CalcolaDanno(listaDifensori);
-            Console.WriteLine(listaDifensori.Count);
-
-
-
-            //controllo se devono e possono attaccare i difensori
-            if (bene_male && difensori.VitaTotale>0)
+            else
             {
-                bene_male= false;
-                Scontro(difensori,attaccanti,listaDifensori,listaAttaccanti, SC, bene_male);
+                listaDifensori.Clear();
+                difensori.CalcolaMedia(listaDifensori);
+                difensori.CalcolaForza(listaDifensori);
+                difensori.CalcolaEsperienza(listaDifensori);
+                difensori.CalcolaDanno(listaDifensori);
             }
             //stampo i risultati e ritorno al menu
             Console.WriteLine("STATISTICHE POST-BATTAGLIA");
             difensori.Stampa();
             attaccanti.Stampa();
-            MenuGuerra(SC);
+            MenuGuerra(SC,RC);
         }
     }
 
@@ -434,6 +441,7 @@ namespace LoR
         public int Forza { get; set; }
         public int Esperienza { get; set; }
         public int Danno { get; set; }
+        
 
         public abstract void GeneraVita();
         public abstract void GeneraForza();
@@ -629,8 +637,7 @@ namespace LoR
         public int EsperienzaTotale { get; set; }
         public int DannoTotale { get; set; }
         public string Razza { get; set; }
-
-
+        public int NCombattenti { get; set; }
         public void CalcolaVita(List<Combattente> listaSoldati)
         {
             VitaTotale = 0;
@@ -642,7 +649,17 @@ namespace LoR
 
         public void CalcolaMedia(List<Combattente> listaSoldati)
         {
-            MediaVita = VitaTotale / listaSoldati.Count;
+            if (listaSoldati.Count != 0)
+            {
+                MediaVita = VitaTotale / listaSoldati.Count;
+                NCombattenti = listaSoldati.Count();
+            }
+            else
+            {
+                MediaVita = 0;
+                NCombattenti = 0;
+                VitaTotale = 0;
+            }
         }
         public void CalcolaForza(List<Combattente> listaSoldati)
         {
@@ -671,7 +688,7 @@ namespace LoR
         public void Stampa()
         {
             Console.WriteLine("Statistiche battaglione {0}:",Razza);
-            Console.WriteLine($"Vita: {VitaTotale}, Forza: {ForzaTotale}, Esperienza: {EsperienzaTotale}, Danno: {DannoTotale}, Razza: {Razza}");
+            Console.WriteLine($"Vita: {VitaTotale}, Forza: {ForzaTotale}, Esperienza: {EsperienzaTotale}, Danno: {DannoTotale}, Razza: {Razza}, Combattenti rimasti: {NCombattenti}");
         }
     }
 
